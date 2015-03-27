@@ -1,6 +1,8 @@
 /*--------------------------------------------------------------
 Maps
 --------------------------------------------------------------*/
+
+
 var addressName = mw_map_vars.addressName,
 	long = mw_map_vars.long,
 	lat = mw_map_vars.lat,
@@ -13,6 +15,7 @@ var addressName = mw_map_vars.addressName,
 	mile = 1609.344;
 	pluginUrl = mw_map_vars.pluginUrl,
 	autoAddress = mw_map_vars.autoAddress;
+
 
 // single map function, only called if google map address is equal to a string
 function singleMap() {
@@ -90,7 +93,7 @@ function singleMap() {
 
 		} else {
 
-			var image = new google.maps.MarkerImage( pluginUrl +"/mw-business-details/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
+			var image = new google.maps.MarkerImage( pluginUrl +"/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
 
 		};
 			
@@ -246,7 +249,7 @@ function staticMap() {
 
 	} else {
 
-		var image = new google.maps.MarkerImage( pluginUrl +"/mw-business-details/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
+		var image = new google.maps.MarkerImage( pluginUrl +"/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
 
 	};
 		
@@ -418,7 +421,7 @@ function multiMap() {
 
 	} else {
 
-		var image = new google.maps.MarkerImage( pluginUrl +"/mw-business-details/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
+		var image = new google.maps.MarkerImage( pluginUrl +"/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
 
 	};
 
@@ -452,7 +455,6 @@ load map once you've scrolled to it
 ================================================================= */
 
 jQuery(document).ready( function($){
-
 
 	function mwMapLoad() {
 
