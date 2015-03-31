@@ -232,7 +232,7 @@ class mw_business_details_shortcodes {
 		global vars within maps
 		================================================== */
 
-		$pluginUrl = plugin_dir_url( dirname(__FILE__) );
+		$pluginUrl = plugins_url();
 		$businessAddresses = get_option( 'business_address' );
 		$autoAddressArray = array();
 
@@ -534,8 +534,6 @@ class mw_business_details_shortcodes {
 
 		// not included in yoast anyway
 		$mwLinkedIn = get_option('linkedIn');
-		$resetUrl = array( 'http://', 'https://' );
-		$mwLinkedIn = str_replace( $resetUrl, '', $mwLinkedIn );
 
  		if ( isset($atts['class']) ) { 
 
@@ -569,7 +567,7 @@ class mw_business_details_shortcodes {
 
 			if ( $mwFacebook ) { $html .= '<li><a target="_blank" class="facebook icon-facebook" href="'.$mwFacebook.'" title="View '.$defaultName.' on Facebook"></a></li>'; }
 
-			if ( $mwLinkedIn ) { $html .= '<li><a target="_blank" class="linkedIn icon-linkedin" href="https://'.$mwLinkedIn.'" title="View '.$defaultName.' on LinkedIn"></a></li>'; }
+			if ( $mwLinkedIn ) { $html .= '<li><a target="_blank" class="linkedIn icon-linkedin" href="'.$mwLinkedIn.'" title="View '.$defaultName.' on LinkedIn"></a></li>'; }
 
 			if ( $mwGooglePlus) { $html .= '<li><a target="_blank" class="googleplus icon-google-plus" href="'.$mwGooglePlus.'" title="View '.$defaultName.' on Google Plus"> </a></li>'; }
 
@@ -800,14 +798,9 @@ class mw_business_details_shortcodes {
 
 			}
 
-			if ( isset($addressDetails['telephone_number']) ) {
-
-				$telephoneNumberSlug = str_replace( ' ', '', $addressDetails['telephone_number']);
-
-			}
-
+			$telephoneNumberSlug = str_replace( ' ', '', $addressDetails['telephone_number']);
 			
-			$html .= '<li '.$schema .' >'.$addressDetails['address_name'].' - <aclass="phone" id="'.$addressName.'-phone" href="tel:'.$telephoneNumberSlug.'">'.$addressDetails['telephone_number'].'</a></li>';
+			$html .= '<li>'.$addressDetails['address_name'].' - <a '.$schema .' class="phone" id="'.$addressName.'-phone" href="tel:'.$telephoneNumberSlug.'">'.$addressDetails['telephone_number'].'</a></li>';
 
 		}
 
