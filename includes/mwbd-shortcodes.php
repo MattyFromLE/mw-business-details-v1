@@ -35,7 +35,6 @@ class mw_business_details_shortcodes {
 	public function __construct() {
 
 		$this->register_shortcodes();
-		// add_action('wp_head', array(&$this, 'mw_scripts'), 6);  
 		add_action('wp_head', array(&$this, 'socialIcons'), 6);  
 		add_action('wp_head', array(&$this, 'mw_tracking'));  
 		add_action('wp_head', array(&$this, 'mw_social_styles'), 6);  
@@ -232,7 +231,7 @@ class mw_business_details_shortcodes {
 		global vars within maps
 		================================================== */
 
-		$pluginUrl = plugins_url();
+		$pluginUrl = plugin_dir_url( dirname(__FILE__) );
 		$businessAddresses = get_option( 'business_address' );
 		$autoAddressArray = array();
 
@@ -534,6 +533,8 @@ class mw_business_details_shortcodes {
 
 		// not included in yoast anyway
 		$mwLinkedIn = get_option('linkedIn');
+		$resetUrl = array( 'http://', 'https://' );
+		$mwLinkedIn = str_replace( $resetUrl, '', $mwLinkedIn );
 
  		if ( isset($atts['class']) ) { 
 
@@ -567,7 +568,7 @@ class mw_business_details_shortcodes {
 
 			if ( $mwFacebook ) { $html .= '<li><a target="_blank" class="facebook icon-facebook" href="'.$mwFacebook.'" title="View '.$defaultName.' on Facebook"></a></li>'; }
 
-			if ( $mwLinkedIn ) { $html .= '<li><a target="_blank" class="linkedIn icon-linkedin" href="'.$mwLinkedIn.'" title="View '.$defaultName.' on LinkedIn"></a></li>'; }
+			if ( $mwLinkedIn ) { $html .= '<li><a target="_blank" class="linkedIn icon-linkedin" href="https://'.$mwLinkedIn.'" title="View '.$defaultName.' on LinkedIn"></a></li>'; }
 
 			if ( $mwGooglePlus) { $html .= '<li><a target="_blank" class="googleplus icon-google-plus" href="'.$mwGooglePlus.'" title="View '.$defaultName.' on Google Plus"> </a></li>'; }
 
@@ -717,7 +718,7 @@ class mw_business_details_shortcodes {
 						$html .= '<li itemprop="addressRegion">'.$addressRegion.'</li>';
 						$html .= '<li itemprop="postalCode">'.$postCode.'</li>';
 						$html .= '</ul>';
-						$html .= '<a class="phone" itemprop="telephone"href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
+						// $html .= '<a class="phone" itemprop="telephone"href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
 						$html .= '</div>';
 
 					} 
@@ -745,18 +746,18 @@ class mw_business_details_shortcodes {
 
 						if ( isset($mwTitle) ) {
 
-							$html .= '<p class="schemaTitle">'.$mwTitle.'</p>';
+							$html .= '<p>'.$mwTitle.'</p>';
 
 						}
 
-						$html .= '<p class="schemaTitle"><strong>'.$mainAddressName.'</strong></p>';
+						$html .= '<p><strong>'.$mainAddressName.'</strong></p>';
 						$html .= '<ul>';
 						$html .= '<li>'.$streetAddress.'</li>';
 						$html .= '<li>'.$addressLocality.'</li>';
 						$html .= '<li>'.$addressRegion.'</li>';
 						$html .= '<li>'.$postCode.'</li>';
 						$html .= '</ul>';
-						$html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">Telephone: '.$telNumber.'</span></a>';
+						// $html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">Telephone: '.$telNumber.'</span></a>';
 						$html .= '</div>';
 
 					}
@@ -798,9 +799,13 @@ class mw_business_details_shortcodes {
 
 			}
 
-			$telephoneNumberSlug = str_replace( ' ', '', $addressDetails['telephone_number']);
+			if ( isset($addressDetails['telephone_number'] ) && $addressDetails['telephone_number'] != '' ) {
+
+				$telephoneNumberSlug = str_replace( ' ', '', $addressDetails['telephone_number']);
+				$html .= '<li '.$schema .' ><a id="'.$addressName.'-phone" href="tel:'.$telephoneNumberSlug.'">'.$addressDetails['telephone_number'].'</a></li>';
+
+			}
 			
-			$html .= '<li>'.$addressDetails['address_name'].' - <a '.$schema .' class="phone" id="'.$addressName.'-phone" href="tel:'.$telephoneNumberSlug.'">'.$addressDetails['telephone_number'].'</a></li>';
 
 		}
 
@@ -823,8 +828,18 @@ class mw_business_details_shortcodes {
 		$telNumberSlug = preg_replace('/[\s-]+/', '', $telNumber);
 		$telNumberSlug = str_replace(array( '(', ')' ), '', $telNumberSlug);
 
+		if ( isset($atts['class']) ) {
+		
+			$customClass = 'class="'.$atts['class'].'"';
+
+		} else {
+
+			$customClass = '';
+
+		}
+
 		$html = ' ';
-		$html .= '<a class="mwMainNumber phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$atts["id"].'-phone"> <span class="calltrack_number">'.$telNumber.'</span></a>';
+		$html .= '<a '.$customClass.' href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$atts["id"].'-phone"> <span class="calltrack_number">'.$telNumber.'</span></a>';
 		return $html;
 
 	}
@@ -840,8 +855,19 @@ class mw_business_details_shortcodes {
 
 		$altNumber = get_option( "alt_no" );
 		$altNoSpace = preg_replace("/[\s-]+/", "", $altNumber);
+
+		if ( isset($atts['class']) ) {
+		
+			$customClass = 'class="'.$atts['class'].'"';
+
+		} else {
+
+			$customClass = '';
+
+		}
+
 		$html = ' ';
-		$html = '<a class="phone" href="tel:'.$altNoSpace.'" title="Call Today" id="'.$atts["id"].'-alt-phone">'.$altNumber.'</a>';
+		$html = '<a '.$customClass.' href="tel:'.$altNoSpace.'" title="Call Today" id="'.$atts["id"].'-alt-phone">'.$altNumber.'</a>';
 		return $html;
 		
 	}
@@ -955,6 +981,12 @@ class mw_business_details_shortcodes {
 					$html .= '<div class="mw-business-details-section contact-details"><p class="schemaTitle">Contact Details</p>';
 
 					$html .= $this->mwListNumbers();
+				
+					if ($mainNumber) {
+					
+						$html .= '<p itemprop="phone" class="mwMainNumber"><a href="tel:'.$mainNumberNoBrackets.'" title="Call Today" class="phone" id="contact-mobile-phone">'.$mainNumber.'</a></p>';
+					
+					}
 
 					if ($faxNumber) {
 
@@ -995,6 +1027,7 @@ class mw_business_details_shortcodes {
 					
 						$html .= '<div class="mw-business-details-section address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 						$html .= '<p class="schemaTitle" itemprop="name"><strong>'.$defaultName.'</strong></p>';
+						$html .= '<p><strong>'.$mainAddressName.'</strong></p>';
 						$html .= '<ul>';
 						$html .= '<li itemprop="streetAddress">'.$streetAddress.'</li>';
 						$html .= '<li itemprop="addressLocality">'.$addressLocality.'</li>';

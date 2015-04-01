@@ -60,8 +60,6 @@ jQuery(document).ready(function( $ ){
 
     	var tabMatch = $(this).attr("class").split(' ')[0];
 
-    	// console.log(tabMatch)
-
     	$(this).addClass("nav-tab-active").siblings().removeClass("nav-tab-active");
     	$("#"+ tabMatch).fadeIn(250).siblings().fadeOut(0);
 
@@ -170,7 +168,6 @@ jQuery(document).ready(function( $ ){
 
     		var openingOption = $("select#openingTimeFormat").find(":selected").val();
 
-    		$(".times").fadeIn(250);
 
     		if ( openingOption === "monFri" ) {
 
@@ -194,12 +191,11 @@ jQuery(document).ready(function( $ ){
         $("select#openingTimeFormat").change(function(){
 
         	openingTime();
+            $(".tab-options").fadeIn(250);
 
         });
 
         openingTime();
-
-
 
     /* ==================================================
     address shortcode
