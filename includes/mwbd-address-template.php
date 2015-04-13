@@ -52,6 +52,12 @@ $addressNameSlug = str_replace( ' ', '-', $_GET['addressName']);
         <td><input type="text" class="regular-text" name="business_address[<?php echo $newBusinessAddressName; ?>][telephone_number]" />
         <p class="description">Enter Details</p>
         </td>
+    </tr>    
+    <tr>
+        <th>Google Maps Link</th>
+        <td><input type="text" class="regular-text" name="business_address[<?php echo $newBusinessAddressName; ?>][google_maps_link]" />
+        <p class="description">Enter Details</p>
+        </td>
     </tr>
 
     </tbody>

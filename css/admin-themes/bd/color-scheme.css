@@ -332,3 +332,9 @@ div#wp-responsive-toggle a:before {
 
 .wp-responsive-open #wpadminbar #wp-admin-bar-menu-toggle a {
   background: #1f1f1f; }
+
+  #acf_after_title-sortables {
+  
+  margin: 15px 0 -20px 0;
+
+}

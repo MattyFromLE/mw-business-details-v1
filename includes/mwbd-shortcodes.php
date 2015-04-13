@@ -79,8 +79,8 @@ class mw_business_details_shortcodes {
 
 		if ( $slug == 'deslug' ) {
 
-			$string = ucwords( $string );
 			$string = str_replace( '-', ' ', $string );
+			$string = ucwords( $string );
 			return $string;
 
 		} else {
@@ -203,7 +203,7 @@ class mw_business_details_shortcodes {
 		$addressName = $companyName;
 	
 		/* ==================================================
-		only enqueue scripts on selected
+		only enqueue scripts on selected pages
 		================================================== */
 
 		$mapShowPage = get_option( "mapShowPage", array() );
@@ -217,13 +217,10 @@ class mw_business_details_shortcodes {
 		if ( is_page( $pageID ) ) {
 
 			// Enqueue google API for Google Maps
-			wp_register_script( 'add-google-script', 'https://maps.googleapis.com/maps/api/js?sensor=false' );
+			wp_register_script( 'add-google-script', 'https://maps.googleapis.com/maps/api/js?sensor=false', null, null, null );
 			wp_enqueue_script( 'add-google-script' );  
-			wp_register_script( 'maps_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/maps.js','','', '' );
+			wp_register_script( 'maps_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/maps.js', null, null, null );
 			wp_enqueue_script( 'maps_scripts' );				
-
-			// enqueue map styles 
-			wp_enqueue_style( 'mw-frontend-theme', plugin_dir_url( dirname(__FILE__) ) .'css/mw-business-details-frontend.css','', null );
 
 		}
 
@@ -233,7 +230,7 @@ class mw_business_details_shortcodes {
 
 		$pluginUrl = plugin_dir_url( dirname(__FILE__) );
 		$businessAddresses = get_option( 'business_address' );
-		$autoAddressArray = array();
+		$addressArray = array();
 
 		/* ==================================================
 		is the address being set in the shortcode?
@@ -249,9 +246,11 @@ class mw_business_details_shortcodes {
 
 		}
 
+		// checks to see where address is being set
+
 		if ( isset($atts['address']) && $mapAddress != 'all' ) {
 		
-		// if address is being set in the shortcode, and doesn't equal all, use this map
+			// if address is being set in the shortcode, and doesn't equal all, use this map
 
 			foreach ( $businessAddresses as $businessAddressName => $businessAddressDetails ) {
 
@@ -262,7 +261,14 @@ class mw_business_details_shortcodes {
 					$addressLocality = str_replace( ',', '', $addressLocality );
 					$postCode = strip_tags($businessAddressDetails['postal_code']);
 					$postCode = str_replace( ',', '', $postCode );
-					$autoAddressArray = $streetAddress .', '. $addressLocality .', '. $postCode;
+					$addressArray = array( 
+
+						'address' => $streetAddress .', '. $addressLocality .', '. $postCode,
+						'latitude' => $businessAddressDetails['latitude'],
+						'longitude' => $businessAddressDetails['longitude'],
+						'googleMapsLink' => $businessAddressDetails['google_maps_link'],
+
+					);
 
 				}
 
@@ -274,13 +280,22 @@ class mw_business_details_shortcodes {
 
 			foreach ( $businessAddresses as $businessAddressName => $businessAddressDetails ) {
 
-				$autoAddressArray[] = array( 
+				$businessAddressName = str_replace( '-', ' ', $businessAddressName );
+				$businessAddressName = ucwords( $businessAddressName );
+
+				$addressArray[] = array( 
 
 					'name' => $businessAddressName,
 					'address' => $businessAddressDetails['street_address'].', '.$businessAddressDetails['postal_code'].', UK',
+					'latitude' => $businessAddressDetails['latitude'],
+					'longitude' => $businessAddressDetails['longitude'],
+					'googleMapsLink' => $businessAddressDetails['google_maps_link'],
 
 				);
+
 			}
+
+			
 
 		} else if ( !isset($atts['address']) && $mapAddress != 'all' ) {
 		
@@ -295,7 +310,14 @@ class mw_business_details_shortcodes {
 					$addressLocality = str_replace( ',', '', $addressLocality );
 					$postCode = strip_tags($businessAddressDetails['postal_code']);
 					$postCode = str_replace( ',', '', $postCode );
-					$autoAddressArray = $streetAddress .', '. $addressLocality .', '. $postCode;
+					$addressArray = array( 
+
+						'address' => $streetAddress .', '. $addressLocality .', '. $postCode,
+						'latitude' => $businessAddressDetails['latitude'],
+						'longitude' => $businessAddressDetails['longitude'],
+						'googleMapsLink' => $businessAddressDetails['google_maps_link'],
+
+					);
 
 				}
 
@@ -307,19 +329,22 @@ class mw_business_details_shortcodes {
 
 			foreach ( $businessAddresses as $businessAddressName => $businessAddressDetails ) {
 
-				$autoAddressArray[] = array( 
+				$businessAddressName = str_replace( '-', ' ', $businessAddressName );
+				$businessAddressName = ucwords( $businessAddressName );
+
+				$addressArray[] = array( 
 
 					'name' => $businessAddressName,
 					'address' => $businessAddressDetails['street_address'].', '.$businessAddressDetails['postal_code'].', UK',
+					'latitude' => $businessAddressDetails['latitude'],
+					'longitude' => $businessAddressDetails['longitude'],
+					'googleMapsLink' => $businessAddressDetails['google_maps_link'],
 
 				);
+				
 			}
 
 		}
-
-		// map position
-		$lat = get_option( "lat" );
-		$long = get_option( "long" );
 
 		// infowindow
 		$showInfoWindow = get_option( "showInfoWindow" );
@@ -342,7 +367,7 @@ class mw_business_details_shortcodes {
 		// radius
 		$radiusDistance = get_option('radiusDistance');
 
-		if ( $autoAddressArray || $addressName || $lat || $long || $zoom || $customMap || $style || $mapMarker || $pinImage || $radiusDistance || $googleMapsLink ) { 
+		if ( $addressArray || $addressName || $zoom || $customMap || $style || $mapMarker || $pinImage || $radiusDistance ) { 
 
 			wp_localize_script('maps_scripts', 'mw_map_vars', array(
 
@@ -351,11 +376,9 @@ class mw_business_details_shortcodes {
 
 					// address name
 					'addressName' => __( $addressName, 'mw-business-details' ),
-					'autoAddress' => __( $autoAddressArray, 'mw-business-details' ),
+					'addressArray' => __( $addressArray, 'mw-business-details' ),
 
 					// map position
-					'lat' => __( $lat, 'mw-business-details'),
-					'long' => __( $long, 'mw-business-details'),
 					'zoom' => __( $zoom, 'mw-business-details'),
 
 					// map style
@@ -376,8 +399,8 @@ class mw_business_details_shortcodes {
 					// radius
 					'radiusDistance' => __( $radiusDistance, 'mw-business-details' ),
 
-					// google map link
-					'googleMapsLink' => __( $googleMapsLink, 'mw-business-details' ),
+					// pass admin ajax
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
 
 				) 
 
@@ -405,14 +428,14 @@ class mw_business_details_shortcodes {
 
 		if ( $tracking !== "1" ) {
 
-			wp_register_script( 'tracking_scripts', plugin_dir_url( dirname(__FILE__) ) . '/js/min/tracking-min.js','','', '' );
+			wp_register_script( 'tracking_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/min/tracking-min.js','','', '' );
 			wp_enqueue_script( 'tracking_scripts' );
 
 			$showTrackingAlert = get_option( 'showTrackingAlert' ); //var_dump($showTrackingAlert);
 
 				wp_localize_script ('tracking_scripts', 'mw_tracking_vars', array(
 
-						// plugin url
+					// plugin url
 					'showTrackingAlert' => __( $showTrackingAlert, 'mw-business-details' )
 
 				)
@@ -601,8 +624,17 @@ class mw_business_details_shortcodes {
 
 		$mainAddresses = get_option('business_address');
 		$html = '';
-		$pageID = $atts['id'];
 		$numberTitle = $atts['title'];
+
+		if ( isset($atts['class']) ) {
+		
+			$customClass = 'class="'.$atts['class'].'"';
+
+		} else {
+
+			$customClass = '';
+
+		}
 		
 		$html .= '<div class="mw-business-details mw-business-details-section numbers">';
 		$html .= '<p class="h3 schemaTitle">'. $numberTitle .'</p>';
@@ -618,9 +650,9 @@ class mw_business_details_shortcodes {
 				$mainAddressName = ucwords($mainAddressName);
 				$telNumber = $mainAddressDetails['telephone_number'];
 
-				if ( $numberChoice == $mainAddressNameSlug ) {
+				if ( $numberChoice == $mainAddressNameSlug && $telNumber != '' ) {
 				
-					$html .= '<a class="phone" itemprop="telephone"href="tel:'.$telNumber.'" title="Call Today" id="'. $pageID .'-'.$mainAddressNameSlug.'-phone"><span>'.$mainAddressName.': </span><span class="calltrack_number">'.$telNumber.'</span></a><br/>';
+					$html .= '<a '. $customClass .' itemprop="telephone"href="tel:'.$telNumber.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a><br/>';
 
 				}
 
@@ -706,11 +738,12 @@ class mw_business_details_shortcodes {
 					$addressRegion = $mainAddressDetails['address_region'];
 					$postCode = $mainAddressDetails['postal_code'];
 					$telNumber = $mainAddressDetails['telephone_number'];
+					$googleMaps = $mainAddressDetails['google_maps_link'];
 					$telNumberSlug = str_replace( ' ', '', $telNumber );
 
 					if ( $addressChoice === $mainAddressNameSlug ) {
 					
-						$html .= '<p class="schemaTitle" itemprop="name"><strong>'.$mainAddressName.'</strong></p>';
+						$html .= '<p class="schemaTitle" itemprop="name"><strong>'.ucwords($mainAddressName).'</strong></p>';
 						$html .= '<div class="address" itemscope itemtype="http://schema.org/PostalAddress">';
 						$html .= '<ul>';
 						$html .= '<li itemprop="streetAddress">'.$streetAddress.'</li>';
@@ -718,8 +751,16 @@ class mw_business_details_shortcodes {
 						$html .= '<li itemprop="addressRegion">'.$addressRegion.'</li>';
 						$html .= '<li itemprop="postalCode">'.$postCode.'</li>';
 						$html .= '</ul>';
+						
 						// $html .= '<a class="phone" itemprop="telephone"href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
 						$html .= '</div>';
+
+						// google maps link
+						if ( $googleMaps ) {
+
+							$html .= '<a target="_blank" href="'.$googleMaps.'">Google Maps</a>';
+
+						}
 
 					} 
 
@@ -737,6 +778,7 @@ class mw_business_details_shortcodes {
 					$addressLocality = $mainAddressDetails['address_locality'];
 					$addressRegion = $mainAddressDetails['address_region'];
 					$postCode = $mainAddressDetails['postal_code'];
+					$googleMaps = $mainAddressDetails['google_maps_link'];
 					$telNumber = $mainAddressDetails['telephone_number'];
 					$telNumberSlug = str_replace( ' ', '', $telNumber );
 
@@ -750,14 +792,22 @@ class mw_business_details_shortcodes {
 
 						}
 
-						$html .= '<p><strong>'.$mainAddressName.'</strong></p>';
+						$html .= '<p><strong>'.ucwords($mainAddressName).'</strong></p>';
 						$html .= '<ul>';
 						$html .= '<li>'.$streetAddress.'</li>';
 						$html .= '<li>'.$addressLocality.'</li>';
 						$html .= '<li>'.$addressRegion.'</li>';
 						$html .= '<li>'.$postCode.'</li>';
 						$html .= '</ul>';
-						// $html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">Telephone: '.$telNumber.'</span></a>';
+
+						// google maps link
+						if ( $googleMaps ) {
+
+							$html .= '<a target="_blank" href="'.$googleMaps.'">Google Maps</a>';
+
+						}	
+
+						$html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
 						$html .= '</div>';
 
 					}
@@ -980,13 +1030,13 @@ class mw_business_details_shortcodes {
 
 					$html .= '<div class="mw-business-details-section contact-details"><p class="schemaTitle">Contact Details</p>';
 
-					$html .= $this->mwListNumbers();
-				
 					if ($mainNumber) {
 					
-						$html .= '<p itemprop="phone" class="mwMainNumber"><a href="tel:'.$mainNumberNoBrackets.'" title="Call Today" class="phone" id="contact-mobile-phone">'.$mainNumber.'</a></p>';
+						$html .= '<p itemprop="telephone" class="mwMainNumber"><a href="tel:'.$mainNumberNoBrackets.'" title="Call Today" class="phone" id="contact-mobile-phone">'.$mainNumber.'</a></p>';
 					
 					}
+					
+					// $html .= $this->mwListNumbers();
 
 					if ($faxNumber) {
 
@@ -1022,6 +1072,7 @@ class mw_business_details_shortcodes {
 					$addressLocality = $mainAddressDetails['address_locality'];
 					$addressRegion = $mainAddressDetails['address_region'];
 					$postCode = $mainAddressDetails['postal_code'];
+					$googleMapsLink = $mainAddressDetails['google_maps_link'];
 
 					if ( $addressChoice === $mainAddressNameSlug ) {
 					
@@ -1036,8 +1087,13 @@ class mw_business_details_shortcodes {
 						$html .= '</ul>';
 						$html .= '</div>';
 
-					}
+						if ( $googleMapsLink ) {
 
+							$html .= '<a class="google-plus-link" href="'.$googleMapsLink.'">Google Maps</a>';
+
+						}
+
+					}
 
 				}
 

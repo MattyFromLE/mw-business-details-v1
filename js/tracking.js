@@ -15,13 +15,6 @@ jQuery(document).ready( function( $ ){
 
 				alert('Currently Tracking: ' + deets );
 
-				/* 
-
-				ONLY NEEDED FOR DEVELOPMENT PURPOSES
-				console.log( "ga('send', 'event', { eventCategory: 'event', eventAction: 'link', eventLabel:" + deets + " });" );
-
-				*/
-
 			}
 
 		});
