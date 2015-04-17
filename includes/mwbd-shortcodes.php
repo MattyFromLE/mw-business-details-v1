@@ -219,7 +219,7 @@ class mw_business_details_shortcodes {
 			// Enqueue google API for Google Maps
 			wp_register_script( 'add-google-script', 'https://maps.googleapis.com/maps/api/js?sensor=false', null, null, null );
 			wp_enqueue_script( 'add-google-script' );  
-			wp_register_script( 'maps_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/maps.js', null, null, null );
+			wp_register_script( 'maps_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/min/maps-min.js', null, null, null );
 			wp_enqueue_script( 'maps_scripts' );				
 
 		}
@@ -341,7 +341,7 @@ class mw_business_details_shortcodes {
 					'googleMapsLink' => $businessAddressDetails['google_maps_link'],
 
 				);
-				
+
 			}
 
 		}
@@ -743,24 +743,29 @@ class mw_business_details_shortcodes {
 
 					if ( $addressChoice === $mainAddressNameSlug ) {
 					
-						$html .= '<p class="schemaTitle" itemprop="name"><strong>'.ucwords($mainAddressName).'</strong></p>';
-						$html .= '<div class="address" itemscope itemtype="http://schema.org/PostalAddress">';
+						$html .= '<div class="address"><p class="schemaTitle" itemprop="name"><strong>'.ucwords($mainAddressName).'</strong></p>';
+						$html .= '<div itemscope itemtype="http://schema.org/PostalAddress">';
 						$html .= '<ul>';
 						$html .= '<li itemprop="streetAddress">'.$streetAddress.'</li>';
 						$html .= '<li itemprop="addressLocality">'.$addressLocality.'</li>';
 						$html .= '<li itemprop="addressRegion">'.$addressRegion.'</li>';
 						$html .= '<li itemprop="postalCode">'.$postCode.'</li>';
 						$html .= '</ul>';
+
+						if ( isset($atts['phone']) && $atts['phone'] != 'hide') {							
 						
-						// $html .= '<a class="phone" itemprop="telephone"href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
-						$html .= '</div>';
+							$html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$telephoneID.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
+						
+						}
 
 						// google maps link
-						if ( $googleMaps ) {
+						if ( isset($atts['googlemaps']) && $atts['googlemaps'] == 'show' ) {
 
-							$html .= '<a target="_blank" href="'.$googleMaps.'">Google Maps</a>';
+							$html .= '<a class="googlemaps" target="_blank" href="'.$googleMaps.'">Google Maps</a>';
 
-						}
+						}	
+
+						$html .= '</div></div>';
 
 					} 
 
@@ -782,6 +787,17 @@ class mw_business_details_shortcodes {
 					$telNumber = $mainAddressDetails['telephone_number'];
 					$telNumberSlug = str_replace( ' ', '', $telNumber );
 
+					if ( isset($telID) ) {
+
+						$telID = $atts['id'];
+						$telephoneID = $telID;
+
+					} else {
+
+						$telephoneID = $mainAddressNameSlug;
+
+					}
+
 					if ( $addressChoice === $mainAddressNameSlug ) {
 					
 						$html .= '<div class="address mw-business-details mw-business-details-section">';
@@ -800,14 +816,19 @@ class mw_business_details_shortcodes {
 						$html .= '<li>'.$postCode.'</li>';
 						$html .= '</ul>';
 
-						// google maps link
-						if ( $googleMaps ) {
+						if ( isset($atts['phone']) && $atts['phone'] != 'hide') {							
+						
+							$html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$telephoneID.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
+						
+						}
 
-							$html .= '<a target="_blank" href="'.$googleMaps.'">Google Maps</a>';
+						// google maps link
+						if ( isset($atts['googlemaps']) && $atts['googlemaps'] == 'show' ) {
+
+							$html .= '<a class="googlemaps" target="_blank" href="'.$googleMaps.'">Google Maps</a>';
 
 						}	
 
-						$html .= '<a class="phone" href="tel:'.$telNumberSlug.'" title="Call Today" id="'.$mainAddressNameSlug.'-phone"><span class="calltrack_number">'.$telNumber.'</span></a>';
 						$html .= '</div>';
 
 					}
@@ -1052,7 +1073,7 @@ class mw_business_details_shortcodes {
 
 					if ($emailAddress) {
 					
-						$html .= '<p class="email"><a href="mailto:'.$emailAddress.'" title="E-Mail Us Today" id="email">' .$emailAddress.'</a></p>';
+						$html .= '<p class="email" itemprop="email"><a href="mailto:'.$emailAddress.'" title="E-Mail Us Today" id="email">' .$emailAddress.'</a></p>';
 					
 					}
 					
@@ -1076,7 +1097,7 @@ class mw_business_details_shortcodes {
 
 					if ( $addressChoice === $mainAddressNameSlug ) {
 					
-						$html .= '<div class="mw-business-details-section address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
+						$html .= '<div class="mw-business-details-section"><div class="address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 						$html .= '<p class="schemaTitle" itemprop="name"><strong>'.$defaultName.'</strong></p>';
 						$html .= '<p><strong>'.$mainAddressName.'</strong></p>';
 						$html .= '<ul>';
@@ -1089,9 +1110,11 @@ class mw_business_details_shortcodes {
 
 						if ( $googleMapsLink ) {
 
-							$html .= '<a class="google-plus-link" href="'.$googleMapsLink.'">Google Maps</a>';
+							$html .= '<a target="_blank" class="google-plus-link" href="'.$googleMapsLink.'">Find us on Google Maps</a>';
 
 						}
+
+						$html .= '</div>';
 
 					}
 

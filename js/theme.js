@@ -168,7 +168,6 @@ jQuery(document).ready(function( $ ){
 
     		var openingOption = $("select#openingTimeFormat").find(":selected").val();
 
-
     		if ( openingOption === "monFri" ) {
 
     			$(".monFri, .weekend").fadeIn(250);
@@ -194,6 +193,12 @@ jQuery(document).ready(function( $ ){
             $(".tab-options").fadeIn(250);
 
         });
+
+        if ( $('select#openingTimeFormate') != 'none' ) {
+
+            $(".tab-options").fadeIn(250);
+
+        }
 
         openingTime();
 
@@ -271,7 +276,7 @@ jQuery(document).ready(function( $ ){
 
                 $('.shortcodeTitle, .schema, .shortcodeID').show();
 
-            } else if ( shortcodeName == 'mainNumber' || shortcodeName == 'companyLogo' ) {
+            } else if ( shortcodeName == 'fullSchema' || shortcodeName == 'mainNumber' || shortcodeName == 'companyLogo' ) {
 
                 $('.shortcodeID').show();
 
@@ -332,6 +337,22 @@ jQuery(document).ready(function( $ ){
 
         $('.inside').fadeOut(0);
         $(this).next('.inside').fadeToggle(150);
+
+    });
+
+    $('.select-address').on('click',function(event){
+
+        event.preventDefault();
+
+        var addressClass = $(this).attr('class').split(' ')['1'];
+
+        console.log( addressClass );
+
+        $("html, body").animate({ 
+
+            scrollTop: $('.address-wrapper#' +addressClass).offset().top
+
+        }, 500 );
 
     });
 

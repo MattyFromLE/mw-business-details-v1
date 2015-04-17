@@ -15,6 +15,8 @@ var addressName = mw_map_vars.addressName,
 
 function getMap() {
 
+	var currentInfoWindow = null;
+
 	var address = addresses['address'],
 		addressLatitude = addresses['latitude'],
 		addressLongitude = addresses['longitude'],
@@ -121,8 +123,16 @@ function getMap() {
 		infowindow.open(map,marker); // Open our InfoWindow
 
 		google.maps.event.addListener(marker, 'click', function() { // Add a Click Listener to our marker
-				
-			infowindow.open(map,marker); // Open our InfoWindow
+			
+			if (currentInfoWindow != null) { 
+
+			   currentInfoWindow.close(); 
+
+			} 
+
+			infowindow.open(map, marker); 
+
+			currentInfoWindow = infowindow; 
 
 		});
 
@@ -170,6 +180,8 @@ function getMap() {
 }
 
 function getMultiMap() {
+
+	var currentInfoWindow = null;
 
 	var mapOptions = {
 
@@ -233,7 +245,15 @@ function getMultiMap() {
 
 				});
 
-				infowindow.open(map, marker);
+				if (currentInfoWindow != null) { 
+
+				   currentInfoWindow.close(); 
+
+				} 
+
+				infowindow.open(map, marker); 
+
+				currentInfoWindow = infowindow; 
 
 		    }
 
