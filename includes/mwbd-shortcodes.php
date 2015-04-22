@@ -219,7 +219,7 @@ class mw_business_details_shortcodes {
 			// Enqueue google API for Google Maps
 			wp_register_script( 'add-google-script', 'https://maps.googleapis.com/maps/api/js?sensor=false', null, null, null );
 			wp_enqueue_script( 'add-google-script' );  
-			wp_register_script( 'maps_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/min/maps-min.js', null, null, null );
+			wp_register_script( 'maps_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/maps.js', null, null, null );
 			wp_enqueue_script( 'maps_scripts' );				
 
 		}
