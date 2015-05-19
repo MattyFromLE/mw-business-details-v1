@@ -138,7 +138,7 @@ class mw_business_details_shortcodes {
 		$defaultName = get_bloginfo("name");
 	    $customName = get_option( "company_name" );
 
-	    if ( $customName ) { 
+	    if ( isset($customName) ) { 
 
 	    	$companyName = '<span>'.$customName.'</span>'; 
 
@@ -148,7 +148,7 @@ class mw_business_details_shortcodes {
 
 	    }
 	   
-	    return $defaultName;
+	    return $companyName;
 
 	}
 
@@ -519,7 +519,7 @@ class mw_business_details_shortcodes {
 		$yoastSocial = get_option('wpseo_social'); 
 		$yoastFacebook = $yoastSocial['facebook_site'];
 		$yoastTwitter = $yoastSocial['twitter_site'];
-		$yoastGooglePlus = $yoastSocial['plus-publisher'];
+		$yoastGooglePlus = $yoastSocial['google_plus_url'];
 
 		// if yoast facebook option is being used
 		if ( $yoastFacebook ) {
