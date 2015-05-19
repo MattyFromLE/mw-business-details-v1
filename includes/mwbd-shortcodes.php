@@ -424,14 +424,14 @@ class mw_business_details_shortcodes {
 
 	public function mw_tracking(){
 
-		$tracking = get_option( 'autoTracking' );
+		$tracking = get_option( 'analytics_profile' );
 
-		if ( $tracking !== "1" ) {
+		if ( $tracking ) {
 
 			wp_register_script( 'tracking_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/min/tracking-min.js', '', '', '' );
 			wp_enqueue_script( 'tracking_scripts' );
 
-			$showTrackingAlert = get_option( 'showTrackingAlert' ); //var_dump($showTrackingAlert);
+			$showTrackingAlert = get_option( 'showTrackingAlert' ); 
 
 				wp_localize_script ('tracking_scripts', 'mw_tracking_vars', array(
 
