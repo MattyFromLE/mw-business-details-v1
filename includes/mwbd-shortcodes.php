@@ -104,16 +104,17 @@ class mw_business_details_shortcodes {
 
 		$logoID = get_option('business_logo_id');
 		$logoSrc = wp_get_attachment_image_src( $logoID, 'mw-logo-size' );
+		$businessType = get_option( "businessType" );
 
 		if ( $logoID ) {
 
 			$html = ' ';
 
-			$html .= '<div id="'.$atts["id"].'-logo" class="logo" itemscope itemtype="http://schema.org/localBusiness">';
+			$html .= '<div id="'.$atts["id"].'-logo" class="logo" itemscope itemtype="http://schema.org/'.$businessType.'">';
 
 			$html .= '<a itemprop="url" href="'. get_bloginfo('url') .'" rel="home" >';
 			
-			$html .= '<img itemprop="logo" src="'. $logoSrc[0] .'" id="mainlogo" alt="'.get_bloginfo("name").' Logo" />';
+			$html .= '<img itemprop="logo" src="'. $logoSrc[0] .'" alt="'.get_bloginfo("name").' Logo" />';
 			
 			$html .= '</a>';
 
@@ -242,12 +243,11 @@ class mw_business_details_shortcodes {
 
 		} else {
 
-			$mapAddress = get_option('addressChoice');
+			$mapAddress = get_option('main_address');
 
 		}
 
 		// checks to see where address is being set
-
 		if ( isset($atts['address']) && $mapAddress != 'all' ) {
 		
 			// if address is being set in the shortcode, and doesn't equal all, use this map
@@ -428,7 +428,7 @@ class mw_business_details_shortcodes {
 
 		if ( $tracking !== "1" ) {
 
-			wp_register_script( 'tracking_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/min/tracking-min.js','','', '' );
+			wp_register_script( 'tracking_scripts', plugin_dir_url( dirname(__FILE__) ) . 'js/min/tracking-min.js', '', '', '' );
 			wp_enqueue_script( 'tracking_scripts' );
 
 			$showTrackingAlert = get_option( 'showTrackingAlert' ); //var_dump($showTrackingAlert);
@@ -1053,11 +1053,9 @@ class mw_business_details_shortcodes {
 
 					if ($mainNumber) {
 					
-						$html .= '<p itemprop="telephone" class="mwMainNumber"><a href="tel:'.$mainNumberNoBrackets.'" title="Call Today" class="phone" id="contact-mobile-phone">'.$mainNumber.'</a></p>';
+						$html .= '<p itemprop="telephone" class="mwMainNumber"><a href="tel:'.$mainNumberNoBrackets.'" title="Call Today" class="phone" id="'.$atts["id"].'-phone">'.$mainNumber.'</a></p>';
 					
 					}
-					
-					// $html .= $this->mwListNumbers();
 
 					if ($faxNumber) {
 
@@ -1067,7 +1065,7 @@ class mw_business_details_shortcodes {
 				
 					if ($altNumber) {
 					
-						$html .= '<p class="phone altnumber"><a href="tel:'.$altNoSpace.'" title="Call Today" id="contact-mobile-phone">'.$altNumber.'</a></p>';
+						$html .= '<p class="phone altnumber"><a href="tel:'.$altNoSpace.'" title="Call Today" id="'.$atts["id"].'-alt-phone">'.$altNumber.'</a></p>';
 					
 					}
 
@@ -1097,9 +1095,10 @@ class mw_business_details_shortcodes {
 
 					if ( $addressChoice === $mainAddressNameSlug ) {
 					
-						$html .= '<div class="mw-business-details-section"><div class="address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
+						$html .= '<div class="mw-business-details-section">';
 						$html .= '<p class="schemaTitle" itemprop="name"><strong>'.$defaultName.'</strong></p>';
 						$html .= '<p><strong>'.$mainAddressName.'</strong></p>';
+						$html .= '<div class="address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 						$html .= '<ul>';
 						$html .= '<li itemprop="streetAddress">'.$streetAddress.'</li>';
 						$html .= '<li itemprop="addressLocality">'.$addressLocality.'</li>';
