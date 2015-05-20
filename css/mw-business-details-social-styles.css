@@ -1,0 +1,42 @@
+.social-methods { 
+
+	float: left;
+	width: 100%;
+	margin: 0;
+
+}
+
+.social-methods li { 
+
+	display: inline; 
+
+}
+
+.social-methods li a {
+
+	float: left;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	border-radius: 100%;
+	background: #00baff;
+	text-align: center;
+	color: #fff;
+	font-size: 1.45em;
+	margin: 0 5px 0 0;
+	transition: all ease-in-out 0.2s;
+	-webkit-transition: all ease-in-out 0.2s;
+	-moz-transition: all ease-in-out 0.2s;
+	-o-transition: all ease-in-out 0.2s;
+
+}
+
+.social-methods li a:hover {
+
+	background: #0F7CA5;
+	transform: rotate(360deg);
+	-webkit-transform: rotate(360deg);
+	-moz-transform: rotate(360deg);
+	-o-transform: rotate(360deg);
+
+}

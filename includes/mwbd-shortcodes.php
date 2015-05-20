@@ -465,6 +465,8 @@ class mw_business_details_shortcodes {
 
 		}	
 
+
+
 	}
 
 	/**
@@ -475,9 +477,16 @@ class mw_business_details_shortcodes {
 	*/
 
 	public function socialIcons() {
+		
+		$socialIcons = get_option( 'mwSocialIcons' );
 
-		// enqueue map styles 
-		wp_enqueue_style( 'mw-social-icons', plugin_dir_url( dirname(__FILE__) ) .'css/icomoon-style.css','', null );
+		if ( $socialIcons === 'enqueue' ) {
+
+			// enqueue social icons
+			wp_enqueue_style( 'mw-social-icons', plugin_dir_url( dirname(__FILE__) ) .'css/icomoon-style.css','', null );
+
+		}			
+
 		
 	}
 
