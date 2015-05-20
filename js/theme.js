@@ -209,6 +209,7 @@ jQuery(document).ready(function( $ ){
     if ( $('.shortcodeGen').attr('id') === 'address' ) {
 
         var addressOrNumber = $('select#addressOrNumber').find('option:selected').val();
+        $('.schema').show();
 
         $('select#addressOrNumber').change(function(){
 
@@ -228,37 +229,41 @@ jQuery(document).ready(function( $ ){
 
         $('body').on( 'click', '#generateBtn', function(){
 
-            var chosenAddress = $('#addressSchemaChoice').find('option:selected').val(),
-                chosenId = $('#shortcodeId').val(),
-                chosenSchema = $('#showSchema').find('option:selected').val(),
-                chosenTitle = $('#shortcodeTitle').val(),
+            var chosenAddress = 'address="' + $('#addressSchemaChoice').find('option:selected').val() + '"',
+                chosenId = 'id="' + $('#shortcodeId').val() + '"',
+                chosenSchema = 'schema="' + $('#showSchema').find('option:selected').val() + '"',
+                chosenTitle = 'title="' + $('#shortcodeTitle').val() + '"',
                 addressOrNumber = $('select#addressOrNumber').find('option:selected').val();
 
             if ( addressOrNumber == 'getNumber' ) { 
 
-                if ( chosenId == '' && chosenTitle == '' ) {
+                if ( chosenId == 'id=""' ) {
 
                     alert('Fill in an ID, and Title first.');
 
                 } else {
 
-                    var generatedShortcode = '['+ addressOrNumber +' address="'+chosenAddress+'" id="'+chosenId+'" title="'+chosenTitle+'" ]';
+                    var generatedShortcode = '['+ addressOrNumber +' '+chosenAddress+' '+chosenId+' '+chosenTitle+']';
 
                     $('#generatedShortcode').val( generatedShortcode );
+                    $('#generatedShortcodePHP').text( generatedShortcode );
+
 
                 }
 
             } else if ( addressOrNumber == 'getAddress' ) {
 
-                if ( chosenId == '' && chosenTitle == '' && chosenSchema == '' ) {
 
-                    alert('Fill in an ID, Schema Choice and Title first.');
+                if ( chosenId == 'id=""' || chosenSchema == 'schema=""' ) {
+
+                    alert('Fill in an ID & Schema Choice.');
 
                 } else {
 
-                    var generatedShortcode = '['+ addressOrNumber +' address="'+chosenAddress+'" id="'+chosenId+'" schema="'+chosenSchema+'" title="'+chosenTitle+'" ]';
+                    var generatedShortcode = '['+ addressOrNumber +' '+chosenAddress+' '+chosenId+' '+chosenSchema+' '+chosenTitle+']';
 
                     $('#generatedShortcode').val( generatedShortcode );
+                    $('#generatedShortcodePHP').text( generatedShortcode );
 
                 }
 
@@ -321,6 +326,7 @@ jQuery(document).ready(function( $ ){
                 generatedShortcode = '['+ shortcodeName +''+ title +''+ schema +''+ ID +']';
 
             $('#generatedShortcode').val( generatedShortcode );
+            $('#generatedShortcodePHP').text( generatedShortcode );
 
         });
 
