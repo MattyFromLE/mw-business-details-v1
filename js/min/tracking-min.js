@@ -1,1 +1,1 @@
-jQuery(document).ready(function($){$("a[id$='-phone']").each(function(){$(this).click(function(){var e=$(this).attr("id");ga("send","event",{eventCategory:"event",eventAction:"link",eventLabel:e});var n=mw_tracking_vars.showTrackingAlert;"show"==n&&alert("Currently Tracking: "+e)})})});
+jQuery(document).ready(function(e){e("a[id$='-phone']").each(function(){e(this).click(function(){var n=e(this).attr("id");ga("send","event",{eventCategory:"event",eventAction:"link",eventLabel:n});var t=mw_tracking_vars.showTrackingAlert;"show"==t&&alert("Currently Tracking: "+n)})})});

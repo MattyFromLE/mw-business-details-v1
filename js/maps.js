@@ -9,6 +9,7 @@ var addressName = mw_map_vars.addressName,
 	pinOrCustom = mw_map_vars.pin,
 	pinImage = mw_map_vars.pinImage,
 	radius = mw_map_vars.radiusDistance,
+	radiusColour = mw_map_vars.radiusColour,
 	mile = 1609.344;
 	pluginUrl = mw_map_vars.pluginUrl,
 	addresses = mw_map_vars.addressArray;
@@ -99,11 +100,18 @@ function getMap() {
 		marker.setVisible(false);	
 		radiusCalc = mile * radius;
 
+		if ( radiusColour ) { 
+
+			radiusHex = radiusColour;
+
+		}
+
 		// set radius
 		var circle = new google.maps.Circle({
 	  		map: map,
 	  		radius: radiusCalc,
-	  		fillColor: '#a54fee',
+	  		fillColor: radiusHex,
+	  		fillOpacity: 0.5,
 	        strokeColor: '#CD0000',
 	   		strokeOpacity: 0,		
 		});

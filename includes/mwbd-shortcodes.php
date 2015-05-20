@@ -366,8 +366,9 @@ class mw_business_details_shortcodes {
 
 		// radius
 		$radiusDistance = get_option('radiusDistance');
+		$radiusColour = get_option('radius_colour_hex');
 
-		if ( $addressArray || $addressName || $zoom || $customMap || $style || $mapMarker || $pinImage || $radiusDistance ) { 
+		if ( $addressArray || $addressName || $zoom || $customMap || $style || $mapMarker || $pinImage || $radiusColour || $radiusDistance ) { 
 
 			wp_localize_script('maps_scripts', 'mw_map_vars', array(
 
@@ -398,6 +399,7 @@ class mw_business_details_shortcodes {
 
 					// radius
 					'radiusDistance' => __( $radiusDistance, 'mw-business-details' ),
+					'radiusColour' => __( $radiusColour, 'mw-business-details' ),
 
 					// pass admin ajax
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
