@@ -79,19 +79,42 @@ function getMap() {
 
 	if ( pinOrCustom == 'custom' ) { 
 
-		var image = new google.maps.MarkerImage( ""+ pinImage +"", null, null, null, new google.maps.Size( parseInt(mw_map_vars.markerWidth), parseInt(mw_map_vars.markerHeight) )); // Create a variable for our marker image.
+		var image = pinImage; // Create a variable for our marker image.
+
+		if ( mw_map_vars.markerWidth && mw_map_vars.markerHeight ) {
+
+			var image = new google.maps.MarkerImage( 
+
+				pinImage, 
+				null, 
+				null, 
+				null, 
+				new google.maps.Size( parseInt(mw_map_vars.markerWidth), parseInt(mw_map_vars.markerHeight) )
+
+			);
+		}	
 
 	} else {
 
-		var image = new google.maps.MarkerImage( pluginUrl +"/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
+		var image = new google.maps.MarkerImage( 
+
+			pluginUrl + "/image/map-marker.svg", 
+			null, 
+			null, 
+			null, 
+			new google.maps.Size( 80, 80 )
+
+		);
 
 	};
 		
 	var marker = new google.maps.Marker({ // Set the marker
+
 		position: addressLatlng, // Position marker to coordinates
 		icon:image, //use our image as the marker
 		map: map, // assign the market to our map variable
 		title: 'Click to view in Google Maps' // Marker ALT Text
+	
 	});	
 
 	if ( mapMarker == "radius" ) { 
@@ -214,17 +237,38 @@ function getMultiMap() {
 		rotateControl:false // Set to false to disable rotate control
 	
 	};
-
+	
 	if ( pinOrCustom == 'custom' ) { 
 
-		var image = new google.maps.MarkerImage( ""+ pinImage +"", null, null, null, new google.maps.Size( parseInt(mw_map_vars.markerWidth), parseInt(mw_map_vars.markerHeight) )); // Create a variable for our marker image.
+		var image = pinImage; // Create a variable for our marker image.
+
+		if ( mw_map_vars.markerWidth && mw_map_vars.markerHeight ) {
+
+			var image = new google.maps.MarkerImage( 
+
+				pinImage, 
+				null, 
+				null, 
+				null, 
+				new google.maps.Size( parseInt(mw_map_vars.markerWidth), parseInt(mw_map_vars.markerHeight) )
+
+			);
+		}	
 
 	} else {
 
-		var image = new google.maps.MarkerImage( pluginUrl +"/image/map-marker.png", null, null, null, new google.maps.Size(46,71)); // Create a variable for our marker image.
+		var image = new google.maps.MarkerImage( 
+
+			pluginUrl + "/image/map-marker.svg", 
+			null, 
+			null, 
+			null, 
+			new google.maps.Size( 80, 80 )
+
+		);
 
 	};
-
+		
 	var map = new google.maps.Map(document.getElementById('map-wrapper'), mapOptions),
 		markerBounds = new google.maps.LatLngBounds(),
 		infowindow = new google.maps.InfoWindow();   
