@@ -50,19 +50,18 @@ class mw_business_details_shortcodes {
 
 	public function register_shortcodes(){
 		
-	   add_shortcode('companyLogo', array(&$this, 'mwCompanyLogo'));
+	   // add_shortcode('companyLogo', array(&$this, 'mwCompanyLogo'));
 	   add_shortcode('fullSchema', array(&$this, 'mwFullSchema'));
 	   add_shortcode('getAddress', array(&$this, 'mwGetAddress'));
 	   add_shortcode('getNumber', array(&$this, 'mwGetNumber'));
 	   add_shortcode('socialLinks', array(&$this, 'mwSocialLinks'));
-	   add_shortcode('mainNumber', array(&$this, 'mwMainNumber'));
-	   add_shortcode('listNumbers', array(&$this, 'mwListNumbers'));
-	   add_shortcode('altNumber', array(&$this, 'mwAltNumber'));
-	   add_shortcode('faxNumber', array(&$this, 'mwFaxNumber'));
-	   add_shortcode('email', array(&$this, 'mwEmail'));
-	   add_shortcode('companyName', array(&$this, 'mwCompanyName'));
-	   add_shortcode('companyNumber', array(&$this, 'mwCompanyNumber'));
-	   add_shortcode('mapWrapper', array(&$this, 'mwMapWrapper'));
+	   // add_shortcode('mainNumber', array(&$this, 'mwMainNumber'));
+	   // add_shortcode('listNumbers', array(&$this, 'mwListNumbers'));
+	   // add_shortcode('altNumber', array(&$this, 'mwAltNumber'));
+	   // add_shortcode('faxNumber', array(&$this, 'mwFaxNumber'));
+	   // add_shortcode('email', array(&$this, 'mwEmail'));
+	   // add_shortcode('companyName', array(&$this, 'mwCompanyName'));
+	   // add_shortcode('companyNumber', array(&$this, 'mwCompanyNumber'));
 	   add_shortcode('getMap', array(&$this, 'mwGetMap'));
 	   add_shortcode('openingTimes', array(&$this, 'mwOpeningTimes'));
 
@@ -243,7 +242,7 @@ class mw_business_details_shortcodes {
 
 		} else {
 
-			$mapAddress = get_option('main_address');
+			$mapAddress = get_option('addressChoice');
 
 		}
 
