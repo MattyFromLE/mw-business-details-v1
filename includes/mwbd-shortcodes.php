@@ -50,18 +50,18 @@ class mw_business_details_shortcodes {
 
 	public function register_shortcodes(){
 		
-	   // add_shortcode('companyLogo', array(&$this, 'mwCompanyLogo'));
+	   add_shortcode('companyLogo', array(&$this, 'mwCompanyLogo'));
 	   add_shortcode('fullSchema', array(&$this, 'mwFullSchema'));
 	   add_shortcode('getAddress', array(&$this, 'mwGetAddress'));
 	   add_shortcode('getNumber', array(&$this, 'mwGetNumber'));
 	   add_shortcode('socialLinks', array(&$this, 'mwSocialLinks'));
-	   // add_shortcode('mainNumber', array(&$this, 'mwMainNumber'));
-	   // add_shortcode('listNumbers', array(&$this, 'mwListNumbers'));
-	   // add_shortcode('altNumber', array(&$this, 'mwAltNumber'));
-	   // add_shortcode('faxNumber', array(&$this, 'mwFaxNumber'));
-	   // add_shortcode('email', array(&$this, 'mwEmail'));
-	   // add_shortcode('companyName', array(&$this, 'mwCompanyName'));
-	   // add_shortcode('companyNumber', array(&$this, 'mwCompanyNumber'));
+	   add_shortcode('mainNumber', array(&$this, 'mwMainNumber'));
+	   add_shortcode('listNumbers', array(&$this, 'mwListNumbers'));
+	   add_shortcode('altNumber', array(&$this, 'mwAltNumber'));
+	   add_shortcode('faxNumber', array(&$this, 'mwFaxNumber'));
+	   add_shortcode('email', array(&$this, 'mwEmail'));
+	   add_shortcode('companyName', array(&$this, 'mwCompanyName'));
+	   add_shortcode('companyNumber', array(&$this, 'mwCompanyNumber'));
 	   add_shortcode('getMap', array(&$this, 'mwGetMap'));
 	   add_shortcode('openingTimes', array(&$this, 'mwOpeningTimes'));
 
@@ -464,6 +464,8 @@ class mw_business_details_shortcodes {
 
 		}	
 
+
+
 	}
 
 	/**
@@ -484,6 +486,7 @@ class mw_business_details_shortcodes {
 
 		}			
 
+		
 	}
 
 	/**
@@ -532,14 +535,10 @@ class mw_business_details_shortcodes {
 		if ( $yoastFacebook ) {
 
 			$mwFacebook = $yoastFacebook;
-			$mwFacebookArray = array( 'https://www.facebook.com/', 'http://www.facebook.com/', 'http://', 'https://' );
-			$mwFacebook = str_replace( $mwFacebookArray, '', $mwFacebook );
 
 		} else { 
 
 			$mwFacebook = get_option('facebook');
-			$mwFacebookArray = array( 'https://www.facebook.com/', 'http://www.facebook.com/', 'http://', 'https://' );
-			$mwFacebook = str_replace( $mwFacebookArray, '', $mwFacebook );
 
 		}
 
@@ -600,7 +599,7 @@ class mw_business_details_shortcodes {
 
 			if ( $mwTwitter ) { $html .= '<li><a target="_blank" class="twitter icon-twitter" href="https://twitter.com/'.$mwTwitter.'" title="View '.$defaultName.' on Twitter"></a></li>'; }
 
-			if ( $mwFacebook ) { $html .= '<li><a target="_blank" class="facebook icon-facebook" href="https://www.facebook.com/'.$mwFacebook.'" title="View '.$defaultName.' on Facebook"></a></li>'; }
+			if ( $mwFacebook ) { $html .= '<li><a target="_blank" class="facebook icon-facebook" href="'.$mwFacebook.'" title="View '.$defaultName.' on Facebook"></a></li>'; }
 
 			if ( $mwLinkedIn ) { $html .= '<li><a target="_blank" class="linkedIn icon-linkedin" href="https://'.$mwLinkedIn.'" title="View '.$defaultName.' on LinkedIn"></a></li>'; }
 
