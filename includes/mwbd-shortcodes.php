@@ -464,8 +464,6 @@ class mw_business_details_shortcodes {
 
 		}	
 
-
-
 	}
 
 	/**
@@ -486,7 +484,6 @@ class mw_business_details_shortcodes {
 
 		}			
 
-		
 	}
 
 	/**
@@ -535,10 +532,14 @@ class mw_business_details_shortcodes {
 		if ( $yoastFacebook ) {
 
 			$mwFacebook = $yoastFacebook;
+			$mwFacebookArray = array( 'https://www.facebook.com/', 'http://www.facebook.com/', 'http://', 'https://' );
+			$mwFacebook = str_replace( $mwFacebookArray, '', $mwFacebook );
 
 		} else { 
 
 			$mwFacebook = get_option('facebook');
+			$mwFacebookArray = array( 'https://www.facebook.com/', 'http://www.facebook.com/', 'http://', 'https://' );
+			$mwFacebook = str_replace( $mwFacebookArray, '', $mwFacebook );
 
 		}
 
@@ -599,7 +600,7 @@ class mw_business_details_shortcodes {
 
 			if ( $mwTwitter ) { $html .= '<li><a target="_blank" class="twitter icon-twitter" href="https://twitter.com/'.$mwTwitter.'" title="View '.$defaultName.' on Twitter"></a></li>'; }
 
-			if ( $mwFacebook ) { $html .= '<li><a target="_blank" class="facebook icon-facebook" href="'.$mwFacebook.'" title="View '.$defaultName.' on Facebook"></a></li>'; }
+			if ( $mwFacebook ) { $html .= '<li><a target="_blank" class="facebook icon-facebook" href="https://www.facebook.com/'.$mwFacebook.'" title="View '.$defaultName.' on Facebook"></a></li>'; }
 
 			if ( $mwLinkedIn ) { $html .= '<li><a target="_blank" class="linkedIn icon-linkedin" href="https://'.$mwLinkedIn.'" title="View '.$defaultName.' on LinkedIn"></a></li>'; }
 
